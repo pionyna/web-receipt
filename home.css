@@ -1,10 +1,10 @@
 @font-face {
   font-family: "pixel";
-  src: url("../Pix32.ttf") format("truetype");
+  src: url("Pix32.ttf") format("truetype");
 }
 @font-face {
   font-family: "hf";
-  src: url("../LEMONMILK-BOLD.OTF") format("truetype");
+  src: url("LEMONMILK-BOLD.OTF") format("truetype");
 }
 
 :root {
