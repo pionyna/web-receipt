@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Receipt Generator — N!-CY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="home.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Receipt Generator</h1>
+      <p class="lead">
+        Masukkan nama barang dan harga — lalu buat gambar struk yang bisa
+        diunduh.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <form id="item-form" onsubmit="return false">
+            <label for="item-name">Nama Barang</label>
+            <select
+              id="item-select"
+              style="
+                width: 100%;
+                padding: 10px;
+                border-radius: 8px;
+                border: 1px solid #eee;
+                margin-bottom: 8px;
+              "
+            >
+              <option value="">Pilih item…</option>
+              <option value="Layout">Layout</option>
+              <option value="Account">Account</option>
+              <option value="Custom">Custom</option>
+            </select>
+
+            <input
+              id="item-name"
+              type="text"
+              placeholder="Contoh: Layout Pink"
+              required
+            />
+
+            <label for="item-price" style="margin-top: 10px">Harga (Rp)</label>
+            <input
+              id="item-price"
+              type="number"
+              placeholder="100000"
+              min="0"
+              required
+            />
+            <label for="customer-name" style="margin-top: 10px"
+              >Nama Customer</label
+            >
+            <input
+              id="customer-name"
+              type="text"
+              placeholder="Contoh: Piony"
+              required
+            />
+
+            <div style="margin-top: 12px; display: flex; gap: 8px">
+              <button id="add-btn">Tambah</button>
+              <button id="clear-btn" type="button" class="btn-ghost">
+                Bersihkan
+              </button>
+            </div>
+          </form>
+
+          <div class="items">
+            <h3>Daftar Barang</h3>
+            <table id="items-table">
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Harga (Rp)</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 10px;
+              "
+            >
+              <div class="small">Total</div>
+              <div id="total" style="font-weight: 700">Rp 0</div>
+            </div>
+
+            <div class="controls">
+              <button id="gen-btn">Generate Receipt</button>
+              <button id="download-btn" class="btn-ghost" disabled>
+                Download PNG
+              </button>
+              <button id="copy-btn" class="btn-ghost">Salin Teks</button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+            width: 460px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-self: center;
+            align-items: center;
+          "
+        >
+          <div class="receipt" id="receipt-area">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <div class="judul">
+                <h2>RECEIPTIFY</h2>
+                <div class="meta">
+                  <div class="small" style="margin-bottom: 5px">
+                    N!CY's Store || @pagebynicy
+                  </div>
+                  <span style="font-family: pixel" id="r-date">-</span>
+                  <div class="meta" style="margin-top: 5px; font-family: pixel">
+                    belongs to: <span id="r-customer">-</span>
+                  </div>
+                </div>
+              </div>
+              <div style="text-align: right"></div>
+            </div>
+
+            <div style="margin-top: 10px">
+              <table id="r-table" style="width: 100%">
+                <thead style="font-size: 13px; color: var(--muted)">
+                  <tr>
+                    <th>Item</th>
+                    <th style="text-align: right">Harga</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+              "
+            >
+              <div style="margin-top: 8px; font-family: pixel">Total</div>
+              <div class="tot" style="font-family: pixel" id="r-total">
+                Rp 0
+              </div>
+            </div>
+
+            <div class="smalll" style="margin-top: 50px; font-family: pixel">
+              orderanmu sudah tersimpan manis dalam daftarku, waktunya
+              menyelesaikan pesanan penuh cinta ini ⋆˙⟡ <br />
+              <br />
+              harap cek ulang nominalnya dan kirimkan aku bukti tangkapan layar
+              setelah pembayaran, aku akan bungkus orderanmu setelahnya 𐔌՞꜆.
+              ̫.꜀՞𐦯 ♡
+            </div>
+            <div style="text-align: center; margin-top: 12px">
+              <img
+                id="qris-img"
+                src="qris.png"
+                alt="QRIS"
+                style="width: 180px; border-radius: 6px"
+              />
+              <div class="small" style="color: #ff7676">
+                Scan untuk pembayaran
+              </div>
+            </div>
+          </div>
+
+          <div class="preview">
+            <div class="small">
+              Preview gambar (klik Generate lalu Download)
+            </div>
+            <img
+              id="preview-img"
+              alt="preview"
+              style="
+                display: block;
+                width: 100%;
+                border-radius: 8px;
+                border: 1px solid #ffe6f0;
+                margin-top: 8px;
+              "
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- html2canvas via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+      const items = [];
+      const el = {
+        name: document.getElementById("item-name"),
+        price: document.getElementById("item-price"),
+        addBtn: document.getElementById("add-btn"),
+        clearBtn: document.getElementById("clear-btn"),
+        itemsTbody: document.querySelector("#items-table tbody"),
+        total: document.getElementById("total"),
+        genBtn: document.getElementById("gen-btn"),
+        downloadBtn: document.getElementById("download-btn"),
+        copyBtn: document.getElementById("copy-btn"),
+        rDate: document.getElementById("r-date"),
+        rTableBody: document.querySelector("#r-table tbody"),
+        rTotal: document.getElementById("r-total"),
+        receiptArea: document.getElementById("receipt-area"),
+        previewImg: document.getElementById("preview-img"),
+        customer: document.getElementById("customer-name"),
+        rCustomer: document.getElementById("r-customer"),
+        itemSelect: document.getElementById("item-select"),
+      };
+
+      function formatIDR(n) {
+        return "Rp " + Number(n).toLocaleString("id-ID");
+      }
+
+      function renderList() {
+        el.itemsTbody.innerHTML = "";
+        items.forEach((it, idx) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${escapeHtml(it.name)}</td><td>${formatIDR(
+            it.price
+          )}</td><td style="text-align:right"><button data-idx="${idx}" style="border:0;background:transparent;color:var(--pink);cursor:pointer">hapus</button></td>`;
+          el.itemsTbody.appendChild(tr);
+        });
+        const total = items.reduce((s, i) => s + Number(i.price), 0);
+        el.total.textContent = formatIDR(total);
+      }
+
+      function renderReceipt() {
+        el.rTableBody.innerHTML = "";
+        items.forEach((it) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${escapeHtml(
+            it.name
+          )}</td><td style="text-align:right">${formatIDR(it.price)}</td>`;
+          el.rTableBody.appendChild(tr);
+        });
+        const total = items.reduce((s, i) => s + Number(i.price), 0);
+        el.rTotal.textContent = formatIDR(total);
+        el.rDate.textContent = new Date().toLocaleString("id-ID");
+        el.rCustomer.textContent = el.customer.value || "-";
+      }
+
+      el.itemSelect.addEventListener("change", () => {
+        const val = el.itemSelect.value;
+
+        if (val === "" || val === "Custom") {
+          el.name.value = "";
+          el.name.disabled = false;
+        } else {
+          el.name.value = val; // otomatis isi
+          el.name.disabled = false; // tetap bisa tambah kata belakangnya
+        }
+      });
+
+      el.addBtn.addEventListener("click", () => {
+        const name = el.name.value.trim();
+        const price = Number(el.price.value);
+        if (!name || !price)
+          return alert("Isi nama dan harga terlebih dahulu.");
+        items.push({ name, price });
+        el.name.value = "";
+        el.price.value = "";
+        renderList();
+        renderReceipt();
+      });
+
+      el.clearBtn.addEventListener("click", () => {
+        if (!confirm("Hapus semua item?")) return;
+        items.length = 0;
+        renderList();
+        renderReceipt();
+        el.previewImg.src = "";
+      });
+
+      el.itemsTbody.addEventListener("click", (e) => {
+        if (e.target.matches("button")) {
+          const idx = Number(e.target.dataset.idx);
+          items.splice(idx, 1);
+          renderList();
+          renderReceipt();
+        }
+      });
+
+      el.genBtn.addEventListener("click", async () => {
+        if (items.length === 0) return alert("Tambahkan minimal 1 item.");
+        renderReceipt();
+        // use html2canvas to render receiptArea
+        try {
+          const canvas = await html2canvas(el.receiptArea, {
+            scale: 2,
+            backgroundColor: null,
+          });
+          const dataUrl = canvas.toDataURL("image/png");
+          el.previewImg.src = dataUrl;
+          el.downloadBtn.disabled = false;
+          // set download handler
+          el.downloadBtn.onclick = () => {
+            const a = document.createElement("a");
+            a.href = dataUrl;
+            a.download = `receipt_${Date.now()}.png`;
+            a.click();
+          };
+        } catch (err) {
+          console.error(err);
+          alert("Gagal membuat gambar: " + err.message);
+        }
+      });
+
+      el.copyBtn.addEventListener("click", () => {
+        if (items.length === 0) return alert("Tidak ada yang disalin.");
+        let txt =
+          "Struk Belanja\nTgl: " + new Date().toLocaleString("id-ID") + "\n\n";
+        items.forEach((it) => (txt += `${it.name} — ${formatIDR(it.price)}\n`));
+        txt += "\nTotal: " + el.rTotal.textContent;
+        navigator.clipboard
+          .writeText(txt)
+          .then(() => alert("Teks struk disalin ke clipboard."))
+          .catch(() => alert("Gagal menyalin."));
+      });
+
+      function escapeHtml(unsafe) {
+        return unsafe.replace(/[&<"'`=\/]/g, function (s) {
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            '"': "&quot;",
+            "'": "&#39;",
+            "/": "&#x2F;",
+            "`": "&#x60;",
+            "=": "&#x3D;",
+          }[s];
+        });
+      }
+
+      // initial render
+      renderList();
+      renderReceipt();
+    </script>
+  </body>
+</html>
