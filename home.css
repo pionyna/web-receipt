@@ -1,6 +1,6 @@
 @font-face {
   font-family: "pixel";
-  src: url("Pix32.ttf") format("truetype");
+  src: url("W95FA.otf") format("truetype");
 }
 @font-face {
   font-family: "hf";
@@ -82,7 +82,7 @@ td {
   border-bottom: 1px dashed #f2d6e3;
 }
 .receipt {
-  width: 370px;
+  width: 320px;
   padding: 18px;
   border-radius: 10px;
   background: linear-gradient(180deg, #fff, #fff);
